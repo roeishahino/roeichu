@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>צ׳וקפו</title>
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1c2128;
+  --border: #30363d;
+  --accent: #2dd4bf;
+  --accent2: #f0c040;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --red: #f85149;
+  --card-border: #2a3441;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html {
+  height:100%; background:#0d1117 !important;
+}
+body {
+  height:100%; background:#0d1117 !important;
+  font-family:'Heebo', sans-serif;
+  color:var(--text); direction:rtl;
+  overflow:hidden; position:fixed; width:100%;
+}
+.app {
+  max-width:420px; margin:0 auto;
+  height:100%; height:100dvh; display:flex; flex-direction:column;
+  position:relative; overflow:hidden;
+  background:#0d1117;
+}
+
+/* ══ SCREENS ══ */
+.screen { display:none; flex-direction:column; height:100%; overflow-y:auto; }
+.screen.active { display:flex; }
+
+/* ══ HOME SCREEN ══ */
+#homeScreen { padding:0; }
+.home-header {
+  padding:24px 20px 16px;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.home-title {
+  font-size:42px; font-weight:900; letter-spacing:1px;
+  color:var(--accent);
+  text-shadow:0 0 30px rgba(45,212,191,0.4);
+}
+.home-sub { color:var(--text2); font-size:13px; }
+
+.home-body { padding:0 16px 100px; flex:1; display:flex; flex-direction:column; gap:12px; }
+
+/* Players card */
+.card-section {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:16px; padding:18px 16px;
+}
+.section-title { font-size:15px; font-weight:700; margin-bottom:14px; color:var(--text); }
+
+.player-row {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; background:var(--bg3);
+  border:1px solid var(--border); border-radius:10px; margin-bottom:8px;
+}
+.player-dot {
+  width:10px; height:10px; border-radius:50%; flex-shrink:0;
+}
+.player-name-input {
+  flex:1; background:transparent; border:none; outline:none;
+  color:var(--text); font-size:15px; font-family:'Heebo',sans-serif;
+  font-weight:600; text-align:right;
+}
+.player-name-input::placeholder { color:var(--text2); font-weight:400; }
+.del-btn {
+  background:none; border:none; cursor:pointer; padding:2px 4px;
+  color:var(--text2); font-size:16px; opacity:0.5; transition:opacity 0.2s;
+}
+.del-btn:hover { opacity:1; color:var(--red); }
+
+.add-player-btn {
+  width:100%; background:none; border:1px dashed var(--border);
+  border-radius:10px; padding:10px; color:var(--text2);
+  font-size:14px; font-family:'Heebo',sans-serif; cursor:pointer;
+  transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.add-player-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+/* Settings row */
+.settings-row { display:flex; gap:10px; }
+.setting-box { flex:1; background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:14px 16px; }
+.setting-label { color:var(--text2); font-size:12px; margin-bottom:8px; }
+.setting-input {
+  width:100%; background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; padding:8px 10px; color:var(--text);
+  font-size:18px; font-weight:800; font-family:'Heebo',sans-serif;
+  text-align:center; outline:none;
+}
+.prize-hint { color:var(--text2); font-size:11px; margin-top:6px; display:flex; align-items:center; gap:4px; }
+
+/* Start btn */
+.start-btn {
+  background:var(--accent); color:#0d1117;
+  border:none; border-radius:14px; padding:16px;
+  font-size:17px; font-weight:800; font-family:'Heebo',sans-serif;
+  cursor:pointer; width:100%; letter-spacing:0.5px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:transform 0.15s, opacity 0.15s;
+  box-shadow:0 4px 20px rgba(45,212,191,0.3);
+}
+.start-btn:active { transform:scale(0.97); }
+
+/* Bottom nav */
+.bottom-nav {
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:420px;
+  background:var(--bg2); border-top:1px solid var(--border);
+  display:flex; padding:10px 20px 16px; gap:10px; z-index:50;
+}
+.nav-btn {
+  flex:1; background:var(--bg3); border:1px solid var(--border);
+  border-radius:12px; padding:10px 8px; color:var(--text2);
+  font-size:12px; font-family:'Heebo',sans-serif; font-weight:600;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px;
+  transition:all 0.2s;
+}
+.nav-btn:hover { color:var(--accent); border-color:var(--accent); }
+.nav-btn svg { width:16px; height:16px; }
+
+/* ══ GAME SCREEN ══ */
+#gameScreen { padding:0; background:var(--bg); }
+.game-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px; position:relative;
+}
+.game-prize-pill {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:50px; padding:7px 14px;
+  display:flex; align-items:center; gap:5px;
+  font-size:14px; font-weight:800; color:var(--accent2);
+}
+.game-title {
+  position:absolute; left:50%; transform:translateX(-50%);
+  font-size:22px; font-weight:900; color:var(--accent2);
+  display:flex; align-items:center; gap:6px;
+  text-shadow:0 0 20px rgba(240,192,64,0.4);
+}
+.game-round-pill {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:50px; padding:7px 14px;
+  font-size:13px; color:var(--text2); font-weight:600;
+  display:flex; align-items:center; gap:5px;
+}
+
+/* Minus toggle */
+.minus-wrap { padding:0 16px 12px; }
+.minus-btn {
+  width:100%; background:var(--bg2); border:1px solid var(--border);
+  border-radius:50px; padding:11px 20px; color:var(--text2);
+  font-size:14px; font-family:'Heebo',sans-serif; font-weight:700;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:all 0.25s;
+}
+.minus-btn.active {
+  background:rgba(248,81,73,0.1); border-color:var(--red);
+  color:var(--red); box-shadow:0 0 20px rgba(248,81,73,0.2);
+  animation:pulseBorder 1.4s ease infinite;
+}
+
+/* Game grid */
+.game-grid { padding:0 16px; display:grid; gap:12px; align-content:start; }
+.g-card {
+  background:var(--bg2); border:1.5px solid var(--card-border);
+  border-radius:16px; padding:14px 14px 10px;
+  cursor:pointer; user-select:none; position:relative; overflow:hidden;
+  transition:transform 0.15s, border-color 0.2s, box-shadow 0.2s;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.g-card:hover { transform:translateY(-2px); }
+.g-card:active { transform:scale(0.97); }
+.g-card.minus-ready { cursor:crosshair; border-color:var(--red) !important; box-shadow:0 0 16px rgba(248,81,73,0.25); }
+.g-card-shine {
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 65%);
+}
+.g-card-name { font-size:16px; font-weight:700; color:var(--text); }
+.g-dots { display:flex; gap:5px; flex-wrap:wrap; justify-content:center; }
+.g-dot {
+  width:13px; height:13px; border-radius:50%;
+  background:rgba(255,255,255,0.08); border:1.5px solid rgba(255,255,255,0.12);
+  transition:all 0.2s;
+}
+.g-dot.on { background:var(--dot-color); border-color:var(--dot-color); box-shadow:0 0 6px var(--dot-color); transform:scale(1.15); }
+.g-score { font-size:52px; font-weight:900; color:var(--text); line-height:1; margin-bottom:0; }
+.g-target { font-size:13px; color:var(--text2); font-weight:500; align-self:flex-end; margin-top:-6px; margin-bottom:2px; }
+.g-bar { width:100%; height:3px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
+.g-bar-fill { height:100%; border-radius:3px; transition:width 0.3s ease; }
+
+/* RULES */
+.rules-section { margin-bottom:16px; }
+.rules-section-title { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+.rules-text { color:var(--text2); font-size:14px; line-height:1.6; background:var(--bg3); border-radius:10px; padding:10px 12px; }
+.rules-warning { color:#f97316; background:rgba(249,115,22,0.08); border:1px solid rgba(249,115,22,0.2); }
+.rules-special-row { display:flex; justify-content:space-between; align-items:center; padding:9px 12px; background:var(--bg3); border-radius:10px; margin-bottom:6px; }
+.rules-special-label { color:var(--text); font-weight:600; font-size:14px; }
+.rules-special-pts { color:var(--accent); font-weight:800; font-size:15px; }
+.rules-special-gold { color:var(--accent2) !important; }
+.rules-list { display:flex; flex-direction:column; gap:8px; }
+.rule-item { display:flex; gap:10px; align-items:flex-start; background:var(--bg3); border-radius:10px; padding:10px 12px; font-size:13px; color:var(--text2); line-height:1.5; }
+.rule-item strong { color:var(--text); }
+.rule-num { background:var(--accent); color:#0d1117; font-weight:900; font-size:11px; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.rules-footer { text-align:center; color:rgba(248,81,73,0.7); font-size:12px; font-weight:700; margin:16px 0 4px; letter-spacing:0.5px; }
+
+/* CONFIRM POPUP */
+.confirm-overlay {
+  display:none; position:fixed; inset:0;
+  z-index:500; align-items:center; justify-content:center;
+  background:rgba(0,0,0,0.6); backdrop-filter:blur(4px);
+}
+.confirm-overlay.show { display:flex; }
+.confirm-box {
+  background:#1c2128; border:1px solid #30363d;
+  border-radius:20px; padding:24px 24px 18px;
+  width:85vw; max-width:320px; text-align:center;
+  animation:confirmPop 0.2s cubic-bezier(.2,1.4,.4,1);
+}
+.confirm-name { font-size:22px; font-weight:900; margin-bottom:4px; }
+.confirm-text { color:#8b949e; font-size:14px; margin-bottom:20px; }
+.confirm-btns { display:flex; gap:10px; }
+.confirm-yes {
+  flex:1; background:var(--accent); color:#0d1117;
+  border:none; border-radius:12px; padding:13px;
+  font-size:16px; font-weight:800; font-family:'Heebo',sans-serif; cursor:pointer;
+  transition:transform 0.1s;
+}
+.confirm-yes:active { transform:scale(0.96); }
+.confirm-no {
+  flex:1; background:#21262d; border:1px solid #30363d; color:#8b949e;
+  border-radius:12px; padding:13px;
+  font-size:16px; font-weight:700; font-family:'Heebo',sans-serif; cursor:pointer;
+  transition:all 0.15s;
+}
+.confirm-no:hover { color:var(--text); }
+@keyframes confirmPop { 0%{transform:scale(0.85);opacity:0} 100%{transform:scale(1);opacity:1} }
+
+/* Game bottom nav */
+.game-nav {
+  padding:10px 16px 16px; display:flex; gap:10px; margin-top:auto;
+}
+
+/* ══ WINNER SCREEN ══ */
+#winnerScreen {
+  display:none; flex-direction:column;
+  align-items:center; justify-content:center;
+  background:var(--bg); padding:30px 24px; text-align:center;
+  position:relative; overflow:hidden;
+}
+#winnerScreen.active { display:flex; }
+.winner-trophy { font-size:72px; margin-bottom:16px; animation:trophyBounce 0.6s cubic-bezier(.2,1.6,.4,1); }
+.winner-quote {
+  background:rgba(45,212,191,0.1); border:1px solid rgba(45,212,191,0.25);
+  border-radius:10px; padding:10px 16px; margin-bottom:20px;
+  color:var(--accent); font-size:14px; font-weight:600; font-style:italic;
+  max-width:280px;
+}
+.winner-chukpo { font-size:38px; font-weight:900; color:var(--text); margin-bottom:6px; }
+.winner-name-big { font-size:36px; font-weight:900; color:var(--accent); margin-bottom:4px; text-shadow:0 0 30px rgba(45,212,191,0.5); }
+.winner-sub { color:var(--text2); font-size:14px; margin-bottom:24px; }
+.winner-prize-box {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:14px; padding:16px 40px; margin-bottom:32px;
+}
+.winner-prize-label { color:var(--text2); font-size:12px; margin-bottom:4px; }
+.winner-prize-amt { font-size:32px; font-weight:900; color:var(--text); }
+.winner-prize-currency { font-size:18px; color:var(--text2); }
+.winner-btns { display:flex; gap:10px; width:100%; max-width:320px; }
+.btn-new-game {
+  flex:1; background:var(--accent); color:#0d1117;
+  border:none; border-radius:12px; padding:14px;
+  font-size:15px; font-weight:800; font-family:'Heebo',sans-serif;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
+  transition:transform 0.15s; box-shadow:0 4px 20px rgba(45,212,191,0.3);
+}
+.btn-new-game:active { transform:scale(0.97); }
+.btn-home {
+  background:var(--bg2); border:1px solid var(--border); color:var(--text2);
+  border-radius:12px; padding:14px 20px;
+  font-size:15px; font-weight:700; font-family:'Heebo',sans-serif;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
+  transition:all 0.15s;
+}
+.btn-home:hover { border-color:var(--accent); color:var(--accent); }
+
+/* ══ PANELS ══ */
+.panel-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.8); z-index:200; backdrop-filter:blur(6px);
+  align-items:flex-end; justify-content:center;
+}
+.panel-overlay.show { display:flex; }
+.panel-sheet {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:20px 20px 0 0; padding:24px 20px 32px;
+  width:100%; max-width:420px; max-height:80vh; overflow-y:auto;
+  animation:slideUp 0.3s ease;
+}
+.panel-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 20px; }
+.panel-title { font-size:18px; font-weight:800; margin-bottom:16px; }
+.stat-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px; background:var(--bg3); border:1px solid var(--border);
+  border-radius:12px; margin-bottom:8px;
+}
+.stat-name { font-size:15px; font-weight:700; }
+.stat-right { text-align:left; }
+.stat-wins { font-size:15px; font-weight:800; color:var(--accent2); }
+.stat-earn { font-size:12px; color:var(--text2); }
+.debt-row {
+  display:flex; align-items:center; gap:8px;
+  padding:12px 14px; background:rgba(248,81,73,0.07);
+  border:1px solid rgba(248,81,73,0.2); border-radius:12px; margin-bottom:8px;
+}
+.debt-from { color:#FF8B94; font-weight:700; font-size:14px; }
+.debt-arr { color:var(--text2); flex:1; text-align:center; font-size:13px; }
+.debt-to { color:var(--accent); font-weight:700; font-size:14px; }
+.debt-amt { color:var(--accent2); font-weight:900; font-size:15px; }
+.settle-btn {
+  width:100%; margin-top:10px;
+  background:rgba(45,212,191,0.1); border:1px solid rgba(45,212,191,0.25);
+  border-radius:10px; padding:10px; color:var(--accent);
+  font-size:13px; font-family:'Heebo',sans-serif; font-weight:700; cursor:pointer;
+}
+.no-data { color:var(--text2); text-align:center; padding:20px; font-size:14px; }
+.panel-close {
+  width:100%; margin-top:14px;
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:12px; padding:12px; color:var(--text2);
+  font-size:14px; font-family:'Heebo',sans-serif; font-weight:600; cursor:pointer;
+}
+
+/* ══ COUNTDOWN ══ */
+.countdown-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.95); z-index:300;
+  align-items:center; justify-content:center; flex-direction:column;
+}
+.countdown-overlay.show { display:flex; }
+.cd-num { font-size:160px; font-weight:900; color:var(--text); animation:cdPop 0.7s ease; line-height:1; }
+.cd-go { font-size:64px; font-weight:900; color:var(--accent); animation:cdPop 0.5s ease; }
+
+/* ══ CONFETTI ══ */
+.confetti-piece { position:fixed; top:-20px; animation:fall linear infinite; pointer-events:none; z-index:400; border-radius:2px; }
+
+/* ══ ANIMATIONS ══ */
+@keyframes pulseBorder { 0%,100%{box-shadow:0 0 20px rgba(248,81,73,0.2)} 50%{box-shadow:0 0 35px rgba(248,81,73,0.45)} }
+@keyframes trophyBounce { 0%{transform:scale(0) rotate(-20deg);opacity:0} 70%{transform:scale(1.15) rotate(5deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
+@keyframes cdPop { 0%{transform:scale(2);opacity:0} 60%{opacity:1} 100%{transform:scale(1);opacity:1} }
+@keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(110vh) rotate(540deg);opacity:0} }
+@keyframes slideUp { 0%{transform:translateY(100%)} 100%{transform:translateY(0)} }
+@keyframes flashGreen { 0%,100%{background:var(--bg2)} 50%{background:rgba(45,212,191,0.15)} }
+@keyframes flashRed { 0%,100%{background:var(--bg2)} 50%{background:rgba(248,81,73,0.18)} }
+@keyframes cardPop { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+/* ══ QUOTES ══ */
+.quote-text { display:none; }
+</style>
+<link rel="manifest" id="pwaManifest">
+<script>
+// Inline manifest injection
+const manifest = {
+  name: "צ׳וקפו Pro",
+  short_name: "צ׳וקפו",
+  description: "משחק ניקוד קבוצתי",
+  start_url: ".",
+  display: "standalone",
+  background_color: "#0d1117",
+  theme_color: "#0d1117",
+  orientation: "portrait",
+  icons: [
+    { src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d1117'/><text y='.9em' font-size='80' x='10'>🏆</text></svg>", sizes: "192x192", type: "image/svg+xml" },
+    { src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d1117'/><text y='.9em' font-size='80' x='10'>🏆</text></svg>", sizes: "512x512", type: "image/svg+xml" }
+  ]
+};
+const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+document.getElementById('pwaManifest').href = URL.createObjectURL(blob);
+
+// Service Worker for offline
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'chukpo-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
+      self.skipWaiting();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+    });
+  `;
+  const swBlob = new Blob([swCode], {type:'text/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+}
+</script>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══ HOME SCREEN ══ -->
+  <div class="screen active" id="homeScreen">
+    <div class="home-header">
+      <div class="home-title">צ׳וקפו</div>
+      <div class="home-sub">משחק ניקוד קבוצתי</div>
+    </div>
+    <div class="home-body">
+
+      <!-- Players -->
+      <div class="card-section">
+        <div class="section-title">שחקנים</div>
+        <div id="playersList"></div>
+        <button class="add-player-btn" onclick="addPlayer()">
+          <span style="font-size:18px">+</span> הוסף שחקן
+        </button>
+      </div>
+
+      <!-- Settings -->
+      <div class="settings-row">
+        <div class="setting-box">
+          <div class="setting-label">דמי כניסה (₪)</div>
+          <input class="setting-input" id="feeInput" type="number" value="50" min="0">
+        </div>
+        <div class="setting-box">
+          <div class="setting-label">יעד ניצחון</div>
+          <input class="setting-input" id="targetInput" type="number" value="7" min="3" max="20">
+          <div class="prize-hint" id="prizeHint">
+            <span>🏆</span> <span id="prizeHintText">סה״כ פרס: ₪0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start -->
+      <button class="start-btn" onclick="startGame()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        התחל משחק
+      </button>
+
+    </div>
+
+    <!-- Bottom nav -->
+    <div class="bottom-nav">
+      <button class="nav-btn" onclick="showPanel('statsPanel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        סטטיסטיקות
+      </button>
+      <button class="nav-btn" onclick="showPanel('debtsPanel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h12M8 12h8M8 17h4"/><circle cx="4" cy="7" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="17" r="1"/></svg>
+        חובות
+      </button>
+      <button class="nav-btn" onclick="showPanel('rulesPanel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        חוקה
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ GAME SCREEN ══ -->
+  <div class="screen" id="gameScreen">
+    <div class="game-header">
+      <div class="game-prize-pill">
+        <span>₪</span>
+        <span id="gamePrize">0</span>
+      </div>
+      <div class="game-title">
+        <span>🏆</span> צ׳וקפו
+      </div>
+      <div class="game-round-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span id="roundLabel">סיבוב 1</span>
+      </div>
+    </div>
+
+    <div class="minus-wrap">
+      <button class="minus-btn" id="minusBtn" onclick="toggleMinus()">
+        <span>—</span> מצב מינוס
+      </button>
+    </div>
+
+    <div class="game-grid" id="gameGrid"></div>
+
+    <div class="game-nav">
+      <button class="nav-btn" onclick="showPanel('statsPanel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        סטטיסטיקות
+      </button>
+      <button class="nav-btn" onclick="showPanel('debtsPanel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h12M8 12h8M8 17h4"/><circle cx="4" cy="7" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="17" r="1"/></svg>
+        חובות
+      </button>
+      <button class="nav-btn" onclick="showPanel('rulesPanel')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        חוקה
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ WINNER SCREEN ══ -->
+  <div class="screen" id="winnerScreen">
+    <div class="winner-trophy">🏆</div>
+    <div class="winner-quote" id="winnerQuote">שבו!<br>סיבוב אחרון אני מבטיח 😅</div>
+    <div class="winner-chukpo">צ׳וקפו!</div>
+    <div class="winner-name-big" id="winnerNameEl">—</div>
+    <div class="winner-sub">ניצח/ה!</div>
+    <div class="winner-prize-box">
+      <div class="winner-prize-label">סכום הפרס</div>
+      <div class="winner-prize-amt"><span class="winner-prize-currency">₪</span><span id="winnerPrizeAmt">0</span></div>
+    </div>
+    <div class="winner-btns">
+      <button class="btn-new-game" onclick="nextRound()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+        משחק חדש
+      </button>
+      <button class="btn-home" onclick="goHome()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        בית
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ COUNTDOWN ══ -->
+  <div class="countdown-overlay" id="countdownOverlay">
+    <div id="cdInner"></div>
+  </div>
+
+  <!-- RULES PANEL -->
+  <div class="panel-overlay" id="rulesPanel" onclick="closePanelOutside(event,'rulesPanel')">
+    <div class="panel-sheet">
+      <div class="panel-handle"></div>
+      <div class="panel-title">📜 צוקופו – החוקה</div>
+
+      <div class="rules-section">
+        <div class="rules-section-title">🎯 מטרה</div>
+        <div class="rules-text">להיות הראשון שמגיע ל־10 נקודות. נקודה מתקבלת בכל פעם שמנצחים יד בפלופ (לפי חוקי פוקר).</div>
+      </div>
+
+      <div class="rules-section">
+        <div class="rules-section-title">👥 שחקנים</div>
+        <div class="rules-text">4–9 משתתפים.</div>
+      </div>
+
+      <div class="rules-section">
+        <div class="rules-section-title">⚠️ עונש</div>
+        <div class="rules-text rules-warning">המפסיד מקבל פלקה על ישבן חשוף בעזרת חגורת עור.</div>
+      </div>
+
+      <div class="rules-section">
+        <div class="rules-section-title">⭐ נקודות מיוחדות</div>
+        <div class="rules-special-row">
+          <span class="rules-special-label">רויאל פלאש</span>
+          <span class="rules-special-pts">2 נקודות</span>
+        </div>
+        <div class="rules-special-row">
+          <span class="rules-special-label">פוקר על קארה</span>
+          <span class="rules-special-pts rules-special-gold">10 נקודות 🏆</span>
+        </div>
+      </div>
+
+      <div class="rules-section">
+        <div class="rules-section-title">📋 חוקים נוספים</div>
+        <div class="rules-list">
+          <div class="rule-item"><span class="rule-num">1</span><span>אחרי כל סשן שולחים בקבוצת וואטסאפ את תוצאות ההפלקה.</span></div>
+          <div class="rule-item"><span class="rule-num">2</span><span>ענית בסקר שאתה מגיע — <strong>חובה</strong> להגיע.</span></div>
+          <div class="rule-item"><span class="rule-num">3</span><span>אם הופלקת — בפעם הבאה חובה להראות תוצאות (2–3 חשיפות לפי חומרת ההצלפה).</span></div>
+          <div class="rule-item"><span class="rule-num">4</span><span>אם אתה בקבוצה ומגיע לצוקופו — חובה להשתתף.</span></div>
+          <div class="rule-item"><span class="rule-num">5</span><span>ברזת מצוקופו? בפעם הבאה תוצלף כדי להיכנס ע"י אחד המשתתפים (נבחר בסיבוב צוקופו אחד).</span></div>
+          <div class="rule-item"><span class="rule-num">6</span><span>הצלפה פוליטית (לפי רוב) — מי שהצליף מקבל הצלפה ממקום שני.</span></div>
+        </div>
+      </div>
+
+      <div class="rules-footer">* מי שלא מכבד את חוקי הצוקופו יישא בתוצאות *</div>
+
+      <button class="panel-close" onclick="closePanel('rulesPanel')">סגור</button>
+    </div>
+  </div>
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <div class="confirm-name" id="confirmName"></div>
+      <div class="confirm-text">להוסיף נקודה?</div>
+      <div class="confirm-btns">
+        <button class="confirm-yes" onclick="confirmYes()">✓ כן</button>
+        <button class="confirm-no" onclick="confirmNo()">✕ ביטול</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STATS PANEL ══ -->
+  <div class="panel-overlay" id="statsPanel" onclick="closePanelOutside(event,'statsPanel')">
+    <div class="panel-sheet">
+      <div class="panel-handle"></div>
+      <div class="panel-title">📊 סטטיסטיקות</div>
+      <div id="statsContent"></div>
+      <button class="panel-close" onclick="closePanel('statsPanel')">סגור</button>
+    </div>
+  </div>
+
+  <!-- ══ DEBTS PANEL ══ -->
+  <div class="panel-overlay" id="debtsPanel" onclick="closePanelOutside(event,'debtsPanel')">
+    <div class="panel-sheet">
+      <div class="panel-handle"></div>
+      <div class="panel-title">💸 מי חייב למי</div>
+      <div id="debtsContent"></div>
+      <button class="panel-close" onclick="closePanel('debtsPanel')">סגור</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── COLORS ── */
+const COLORS=[
+  {bg:'#2dd4bf',glow:'rgba(45,212,191,0.5)'},
+  {bg:'#60a5fa',glow:'rgba(96,165,250,0.5)'},
+  {bg:'#c084fc',glow:'rgba(192,132,252,0.5)'},
+  {bg:'#f97316',glow:'rgba(249,115,22,0.5)'},
+  {bg:'#facc15',glow:'rgba(250,204,21,0.5)'},
+  {bg:'#f472b6',glow:'rgba(244,114,182,0.5)'},
+  {bg:'#4ade80',glow:'rgba(74,222,128,0.5)'},
+  {bg:'#fb7185',glow:'rgba(251,113,133,0.5)'},
+];
+
+const QUOTES=[
+  'שבו!<br>סיבוב אחרון אני מבטיח 😅',
+];
+
+/* ── STATE ── */
+let playerNames=[], scores=[], fee=50, target=7, roundNum=1, minusMode=false, hasWinner=false;
+
+/* ── STORAGE ── */
+const LS='chukpov3';
+function load(){try{return JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){return{}}}
+function save(d){try{localStorage.setItem(LS,JSON.stringify(d))}catch(e){}}
+
+/* ── HOME INIT ── */
+function initHome(){
+  const data=load();
+  const def=data.lastNames||['רועי','בר','ווסקר'];
+  document.getElementById('feeInput').value=data.fee||50;
+  document.getElementById('targetInput').value=data.target||7;
+  renderPlayerInputs(def.filter(n=>n));
+  updatePrizeHint();
+  document.getElementById('feeInput').addEventListener('input',updatePrizeHint);
+}
+
+let playerInputsData=[];
+function renderPlayerInputs(names){
+  playerInputsData=names.slice(0,8);
+  const list=document.getElementById('playersList');
+  list.innerHTML='';
+  playerInputsData.forEach((name,i)=>{
+    const col=COLORS[i%COLORS.length];
+    const row=document.createElement('div');
+    row.className='player-row';
+    row.innerHTML=`
+      <div class="player-dot" style="background:${col.bg};box-shadow:0 0 8px ${col.glow}"></div>
+      <input class="player-name-input" id="pi${i}" value="${name}" placeholder="שם שחקן">
+      <button class="del-btn" onclick="removePlayer(${i})">🗑️</button>`;
+    list.appendChild(row);
+  });
+  updatePrizeHint();
+}
+
+function addPlayer(){
+  const inputs=Array.from(document.querySelectorAll('.player-name-input')).map(i=>i.value.trim());
+  if(inputs.length>=8){alert('מקסימום 8 שחקנים!');return;}
+  inputs.push('');
+  renderPlayerInputs(inputs);
+  const last=document.getElementById('pi'+(inputs.length-1));
+  if(last)last.focus();
+}
+
+function removePlayer(idx){
+  const inputs=Array.from(document.querySelectorAll('.player-name-input')).map(i=>i.value.trim());
+  inputs.splice(idx,1);
+  renderPlayerInputs(inputs);
+}
+
+function updatePrizeHint(){
+  const count=document.querySelectorAll('.player-name-input').length;
+  const f=parseInt(document.getElementById('feeInput').value)||0;
+  document.getElementById('prizeHintText').textContent=`סה״כ פרס: ₪${count*f}`;
+}
+
+/* ── START GAME ── */
+function startGame(){
+  const names=Array.from(document.querySelectorAll('.player-name-input')).map(i=>i.value.trim()).filter(Boolean);
+  if(names.length<2){alert('צריך לפחות 2 שחקנים!');return;}
+  fee=parseInt(document.getElementById('feeInput').value)||0;
+  target=parseInt(document.getElementById('targetInput').value)||7;
+  playerNames=names; scores=Array(names.length).fill(0); hasWinner=false; minusMode=false; roundNum=1;
+  const data=load(); data.lastNames=names; data.fee=fee; data.target=target; save(data);
+  showCountdown(()=>{showScreen('gameScreen');buildGameGrid();});
+}
+
+/* ── GAME ── */
+function buildGameGrid(){
+  const grid=document.getElementById('gameGrid');
+  grid.innerHTML='';
+  document.getElementById('gamePrize').textContent=playerNames.length*fee;
+  document.getElementById('roundLabel').textContent='סיבוב '+roundNum;
+  const cols=playerNames.length<=4?2:playerNames.length<=6?3:4;
+  grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  playerNames.forEach((name,i)=>{
+    const col=COLORS[i%COLORS.length];
+    const card=document.createElement('div');
+    card.className='g-card'; card.id='gc'+i;
+    card.style.setProperty('--dot-color',col.bg);
+    card.innerHTML=`
+      <div class="g-card-shine"></div>
+      <div class="g-card-name">${name}</div>
+      <div class="g-dots" id="gd${i}"></div>
+      <div class="g-score" id="gs${i}">0</div>
+      <div class="g-target">/${target}</div>
+      <div class="g-bar"><div class="g-bar-fill" id="gb${i}" style="background:${col.bg};box-shadow:0 0 8px ${col.glow};width:0%"></div></div>`;
+    card.onclick=()=>cardClick(i);
+    grid.appendChild(card);
+    renderCardDots(i);
+  });
+  // minus mode state
+  document.getElementById('minusBtn').classList.remove('active');
+}
+
+function renderCardDots(i){
+  const col=COLORS[i%COLORS.length];
+  const c=document.getElementById('gd'+i);
+  if(!c)return;
+  c.innerHTML='';
+  const show=Math.min(target,14);
+  for(let j=0;j<show;j++){
+    const d=document.createElement('div');
+    d.className='g-dot'+(j<scores[i]?' on':'');
+    c.appendChild(d);
+  }
+}
+
+let pendingPlayer=-1;
+
+function cardClick(i){
+  if(hasWinner)return;
+  if(minusMode){
+    const card=document.getElementById('gc'+i);
+    if(scores[i]<=0){toggleMinus();return;}
+    scores[i]--;
+    card.style.animation='flashRed 0.4s ease';
+    setTimeout(()=>card.style.animation='',400);
+    playBeep(160);
+    updateCardDisplay(i);
+    toggleMinus();
+  } else {
+    if(scores[i]>=target)return;
+    // Show confirm
+    pendingPlayer=i;
+    const col=COLORS[i%COLORS.length];
+    const nameEl=document.getElementById('confirmName');
+    nameEl.textContent=playerNames[i];
+    nameEl.style.color=col.bg;
+    document.getElementById('confirmOverlay').classList.add('show');
+  }
+}
+
+function confirmYes(){
+  document.getElementById('confirmOverlay').classList.remove('show');
+  if(pendingPlayer<0)return;
+  const i=pendingPlayer; pendingPlayer=-1;
+  const card=document.getElementById('gc'+i);
+  scores[i]++;
+  card.style.animation='cardPop 0.3s ease';
+  setTimeout(()=>card.style.animation='',300);
+  playBeep(300+scores[i]*40);
+  card.style.borderColor=COLORS[i%COLORS.length].bg+'88';
+  card.style.boxShadow=`0 0 20px ${COLORS[i%COLORS.length].glow}`;
+  setTimeout(()=>{card.style.borderColor='';card.style.boxShadow='';},600);
+  updateCardDisplay(i);
+  if(scores[i]>=target)triggerWinner(i);
+}
+
+function confirmNo(){
+  document.getElementById('confirmOverlay').classList.remove('show');
+  pendingPlayer=-1;
+}
+
+function updateCardDisplay(i){
+  renderCardDots(i);
+  document.getElementById('gs'+i).textContent=scores[i];
+  document.getElementById('gb'+i).style.width=(scores[i]/target*100)+'%';
+}
+
+function toggleMinus(){
+  minusMode=!minusMode;
+  const btn=document.getElementById('minusBtn');
+  if(minusMode){
+    btn.classList.add('active');
+    document.querySelectorAll('.g-card').forEach(c=>c.classList.add('minus-ready'));
+  } else {
+    btn.classList.remove('active');
+    document.querySelectorAll('.g-card').forEach(c=>c.classList.remove('minus-ready'));
+  }
+}
+
+/* ── WINNER ── */
+function triggerWinner(i){
+  hasWinner=true;
+  updateCardDisplay(i);
+  const name=playerNames[i];
+  const prize=playerNames.length*fee;
+  const data=load();
+  if(!data.history)data.history=[];
+  if(!data.stats)data.stats={};
+  if(!data.debts)data.debts=[];
+  data.history.push({winner:name,prize,date:new Date().toLocaleDateString('he-IL')});
+  if(!data.stats[name])data.stats[name]={wins:0,earnings:0};
+  data.stats[name].wins++;
+  data.stats[name].earnings+=prize;
+  playerNames.forEach((p,idx)=>{
+    if(idx===i)return;
+    data.debts.push({from:p,to:name,amount:fee,date:new Date().toLocaleDateString('he-IL'),settled:false});
+  });
+  save(data);
+
+  setTimeout(()=>{
+    spawnConfetti();
+    playWinSound();
+    document.getElementById('winnerNameEl').textContent=name;
+    document.getElementById('winnerPrizeAmt').textContent=prize;
+    document.getElementById('winnerQuote').innerHTML=QUOTES[Math.floor(Math.random()*QUOTES.length)];
+    showScreen('winnerScreen');
+  },500);
+}
+
+function nextRound(){
+  document.querySelectorAll('.confetti-piece').forEach(e=>e.remove());
+  scores=Array(playerNames.length).fill(0);
+  hasWinner=false; minusMode=false; roundNum++;
+  showCountdown(()=>{showScreen('gameScreen');buildGameGrid();});
+}
+
+function goHome(){
+  document.querySelectorAll('.confetti-piece').forEach(e=>e.remove());
+  showScreen('homeScreen');
+  initHome();
+}
+
+/* ── SCREENS ── */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ── COUNTDOWN ── */
+function showCountdown(cb){
+  const ov=document.getElementById('countdownOverlay');
+  const inner=document.getElementById('cdInner');
+  ov.classList.add('show'); let n=3;
+  function tick(){
+    if(n>0){inner.innerHTML=`<div class="cd-num">${n}</div>`;playBeep(440);n--;setTimeout(tick,850);}
+    else{inner.innerHTML=`<div class="cd-go">GO! 🚀</div>`;playBeep(880);setTimeout(()=>{ov.classList.remove('show');cb();},650);}
+  }
+  tick();
+}
+
+/* ── PANELS ── */
+function showPanel(id){
+  if(id==='statsPanel')buildStats();
+  if(id==='debtsPanel')buildDebts();
+  if(id==='rulesPanel'){}
+  document.getElementById(id).classList.add('show');
+}
+function closePanel(id){document.getElementById(id).classList.remove('show');}
+function closePanelOutside(e,id){if(e.target===document.getElementById(id))closePanel(id);}
+
+function buildStats(){
+  const data=load();
+  const stats=data.stats||{};
+  const names=Object.keys(stats);
+  if(!names.length){document.getElementById('statsContent').innerHTML='<div class="no-data">עוד אין סטטיסטיקות</div>';return;}
+  const sorted=names.sort((a,b)=>stats[b].wins-stats[a].wins);
+  document.getElementById('statsContent').innerHTML=sorted.map((n,i)=>{
+    const s=stats[n];
+    const col=COLORS[i%COLORS.length];
+    return `<div class="stat-row"><span class="stat-name" style="color:${col.bg}">${n}</span><div class="stat-right"><div class="stat-wins">🏆 ${s.wins} ניצחונות</div><div class="stat-earn">💰 ${s.earnings} ₪ נצבר</div></div></div>`;
+  }).join('');
+}
+
+function buildDebts(){
+  const data=load();
+  const raw=(data.debts||[]).filter(d=>!d.settled);
+  const net=calcNet(raw);
+  let html='';
+  if(!net.length){
+    html='<div class="no-data">✅ אין חובות פתוחים!</div>';
+  } else {
+    html=net.map(t=>`<div class="debt-row"><span class="debt-from">${t.from}</span><span class="debt-arr">→</span><span class="debt-to">${t.to}</span><span class="debt-amt">${t.amount} ₪</span></div>`).join('');
+    html+=`<button class="settle-btn" onclick="settleAll()">✓ סמן הכל כשולם</button>`;
+  }
+  document.getElementById('debtsContent').innerHTML=html;
+}
+
+function calcNet(raw){
+  const bal={};
+  raw.forEach(d=>{bal[d.from]=(bal[d.from]||0)-d.amount;bal[d.to]=(bal[d.to]||0)+d.amount;});
+  const cr=Object.entries(bal).filter(([,v])=>v>0).map(([n,v])=>({name:n,amt:v}));
+  const db=Object.entries(bal).filter(([,v])=>v<0).map(([n,v])=>({name:n,amt:-v}));
+  const out=[]; let ci=0,di=0;
+  while(ci<cr.length&&di<db.length){
+    const c=cr[ci],d=db[di],a=Math.min(c.amt,d.amt);
+    if(a>0)out.push({from:d.name,to:c.name,amount:a});
+    c.amt-=a;d.amt-=a;
+    if(!c.amt)ci++;if(!d.amt)di++;
+  }
+  return out;
+}
+
+function settleAll(){
+  const data=load();
+  if(data.debts)data.debts=data.debts.map(d=>({...d,settled:true}));
+  save(data); buildDebts();
+}
+
+/* ── CONFETTI ── */
+function spawnConfetti(){
+  for(let k=0;k<90;k++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    const col=COLORS[Math.floor(Math.random()*COLORS.length)];
+    const size=6+Math.random()*10;
+    el.style.cssText=`left:${Math.random()*100}%;width:${size}px;height:${size}px;background:${col.bg};animation-duration:${2+Math.random()*1.5}s;animation-delay:${Math.random()*1.2}s;border-radius:${Math.random()>.5?'50%':'2px'}`;
+    document.body.appendChild(el);
+  }
+}
+
+/* ── SOUND ── */
+let actx=null;
+function ac(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
+function playBeep(f){
+  try{const c=ac(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(0.08,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.13);o.start();o.stop(c.currentTime+0.13);}catch(e){}
+}
+function playWinSound(){[523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>playBeep(f),i*100));}
+
+
+/* ── INIT ── */
+initHome();
+</script>
+</body>
+</html>
